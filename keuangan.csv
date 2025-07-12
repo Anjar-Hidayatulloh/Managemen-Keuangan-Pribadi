@@ -1,0 +1,42 @@
+import csv
+from datetime import datetime, timedelta
+import random
+
+def buat_file_csv_otomatis(nama_file="keuangan.csv", jumlah_data=20):
+    kategori_pemasukan = ["Gaji", "Bonus", "Investasi"]
+    kategori_pengeluaran = ["Makanan", "Transportasi", "Belanja", "Hiburan", "Tagihan"]
+    semua_kategori = kategori_pemasukan + kategori_pengeluaran
+
+    with open(nama_file, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=["Kategori", "Jumlah", "Tipe", "Tanggal"])
+        writer.writeheader()
+
+        tanggal_awal = datetime(2025, 7, 1)
+
+        for _ in range(jumlah_data):
+            # Acak kategori dan tipe
+            tipe = random.choice(["pemasukan", "pengeluaran"])
+            if tipe == "pemasukan":
+                kategori = random.choice(kategori_pemasukan)
+                jumlah = random.randint(500000, 5000000)
+            else:
+                kategori = random.choice(kategori_pengeluaran)
+                jumlah = random.randint(25000, 1000000)
+
+            # Buat tanggal acak dalam Juli 2025
+            hari_offset = random.randint(0, 30)
+            tanggal = (tanggal_awal + timedelta(days=hari_offset)).strftime("%Y-%m-%d")
+
+            # Tulis ke file
+            writer.writerow({
+                "Kategori": kategori,
+                "Jumlah": jumlah,
+                "Tipe": tipe,
+                "Tanggal": tanggal
+            })
+
+    print(f"✅ File '{nama_file}' berhasil dibuat dengan {jumlah_data} data transaksi.")
+
+# Jalankan fungsi
+if __name__ == "__main__":
+    buat_file_csv_otomatis()
